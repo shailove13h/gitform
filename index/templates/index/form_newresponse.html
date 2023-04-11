@@ -1,0 +1,65 @@
+{% extends 'index/layout.html' %}
+{% load static %}
+{% load get_property %}
+{% load generate_color %}
+{% load count %}
+{% block title %}{{form.title}}'s response ~ Google Forms CLONE{% endblock %}
+{% block script %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<script src="{% static 'index/responses.js' %}" defer></script>
+<script src="{% static 'lib/cookie.min.js' %}"></script>
+{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    
+    <h1>Responses for {{ form.title }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary mb-3" name="export">Export to Excel</button>
+    </form>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <table id="myTable" class="table table-striped"  border="1px solid">
+                <thead>
+                    <tr>
+                        {% for header in headers %}
+                        <th class="sortable">{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                    <tr>
+                        {% for cell in row %}
+                        <td>{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready( function () {
+        $('#myTable').DataTable({
+            "pagingType": "full_numbers",
+            "pageLength": 10,
+            "lengthMenu": [10, 25, 50, 75, 100],
+            "order": [[ 0, "desc" ]],
+            "searching": true,
+            "columnDefs": [
+                { "searchable": true, "targets": 0 },
+                { "searchable": true, "targets": 1 },
+                { "searchable": true, "targets": 2 },
+                { "searchable": true, "targets": 3 },
+                { "searchable": true, "targets": 4 }
+            ]
+        });
+    } );
+</script>
+{% endblock %}
