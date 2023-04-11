@@ -1,0 +1,39 @@
+{% extends 'index/layout.html' %}
+{% load static %}
+{% load get_property %}
+{% block script %}
+<script src="{% static 'index/viewform.js' %}" defer></script>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <span id="bg-color" style="display: none;">{{form.background_color}}</span>
+    <span id="text-color" style="display: none;">{{form.text_color}}</span>
+    <div class="margin-top-bottom box box-shadow bg-white">
+        <h1 class="form-title txtClr">{{form.title}}</h1>
+        <p class="text-label margin-left-right" style="margin-left: 10px;">{{form.confirmation_message}}</p>
+        {% if form.edit_after_submit %}
+        <a href="{% url 'edit_response' form.code code %}" class="edit-response-link">Edit response</a>
+        {% endif %}
+        {% if form.is_quiz and form.allow_view_score %}
+        <div class="modal-division">
+            <a href="{% url 'response' form.code code %}" class="btn view-score-btn">View Score</a>
+        </div>
+        {% endif %}
+
+
+
+    </div>
+    <div class="margin-top-bottom box box-shadow bg-white">
+        <h1 class="form-title txtClr">See {{form.title}} Form Summary</h1>
+        <p class="text-label margin-left-right" style="margin-left: 10px;">Bellow Are Other Perosns Responses</p>
+        <h1>Form Response Summary</h1>
+        <h1>{{ form.title }} Response Summary</h1>
+
+        <div class="modal-division">
+          <a href="{% url 'view_data' form.code %}" class="btn view-score-btn">View Submited Data </a>
+      </div>
+        
+    </div>
+
+</div>
+{% endblock %}

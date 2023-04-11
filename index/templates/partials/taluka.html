@@ -1,0 +1,10 @@
+<select class="custum-select mb-4"
+       name="talukas" 
+       hx-get = "{% url 'blockes' %}"
+       hx-trigger="change"
+       hx-target= "#blockes" > 
+       <option value="0" selected> Select Taluka</option>
+    {% for t in taluka %}
+    <option value="{{ t.pk }}"> {{t.name }} </option>
+    {% endfor %}
+   </select>
