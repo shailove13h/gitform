@@ -21,22 +21,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '5&41du-&cv-cazt$r@k84h*gz-s!*jk2b)131ek^2-lpou#2y4'
-CSRF_TRUSTED_ORIGINS = ['https://localhost:80', 'https://127.0.0.1:8000']
+
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-import socket
 
 
 
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("127.0.0.1", 8000))
+ALLOWED_HOSTS = ['*']
 
-ALLOWED_HOSTS = [s.getsockname()[0], '*','127.0.0.1', 'localhost']
 
-s.close()
 
 
 # Application definition
@@ -87,27 +83,27 @@ WSGI_APPLICATION = 'form.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases  freeforms
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+# DATABASES = {
+#         'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'freeforms',
+#         'NAME': 'freeforms',
 
-        'USER': 'postgres',
+#         'USER': 'postgres',
 
-        'PASSWORD': '123',
+#         'PASSWORD': '123',
 
-        'HOST': 'localhost',
+#         'HOST': 'localhost',
 
-        'PORT': '5432',
-        }
-     }
+#         'PORT': '5432',
+#         }
+#      }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
