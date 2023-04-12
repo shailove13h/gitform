@@ -41,46 +41,39 @@ def view_data(request, code):
             
                     # choice = answer.answer_to.choices.get(id = answer.answer).choice
                     choice = District.objects.filter(id=answer.answer).first()
-                    print("choce form dtrict")
-                    print(choice)
                     
                     row.append(str(choice))
                 elif question.question_type == "talukas":
             
                     # choice = answer.answer_to.choices.get(id = answer.answer).choice
                     choice = Taluka.objects.filter(id=answer.answer).first()
-                    print("choce form taluka")
-                    print(choice)
+                    
                     row.append(str(choice))
                 elif question.question_type == "blocks":
             
                     # choice = answer.answer_to.choices.get(id = answer.answer).choice
                     choice = Block.objects.filter(id=answer.answer).first()
-                    print("choce form Block")
-                    print(choice)
+                    
                     row.append(str(choice))
 
                 elif question.question_type == "sectors":
             
                     # choice = answer.answer_to.choices.get(id = answer.answer).choice
                     choice = Sector.objects.filter(id=answer.answer).first()
-                    print("choce form Sector")
-                    print(choice)
+                    
                     row.append(str(choice))
                 elif question.question_type == "villages":
             
                     # choice = answer.answer_to.choices.get(id = answer.answer).choice
                     choice = Village.objects.filter(id=answer.answer).first()
-                    print("choce form Village")
-                    print(choice)
+                    
                     row.append(str(choice))
 
                 elif question.question_type == "awcs":
             
                     # choice = answer.answer_to.choices.get(id = answer.answer).choice
                     choice = AWC.objects.filter(id=answer.answer).first()
-                    print("choce form awc")
-                    print(choice)
+                    
                     row.append(str(choice))
 
                 elif question.question_type == "multiple choice" or question.question_type == "checkbox":
@@ -88,14 +81,13 @@ def view_data(request, code):
                     # choice = answer.answer_to.choices.get(id = answer.answer).choice
                     
                     choice = answer.answer_to.choices.get(id = answer.answer).choice
-                    print("choce form awc")
-                    print(choice)
+                   
                     row.append(choice)
 
                 else:
-
-                    row.append(answer.answer)
-                    print(answer.answer)
+                    data = answer.answer
+                    row.append(str(data))
+                    
             else:
                 row.append('')
         data.append(row)
