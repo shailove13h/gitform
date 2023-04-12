@@ -32,7 +32,6 @@ ALLOWED_HOSTS = ['*']
 
 
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -81,27 +80,27 @@ WSGI_APPLICATION = 'form.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases  freeforms
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 # DATABASES = {
-#         'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+DATABASES = {
+        'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-#         'NAME': 'freeforms',
+        'NAME': 'dataform ',
 
-#         'USER': 'postgres',
+        'USER': 'shailoveform',
 
-#         'PASSWORD': '123',
+        'PASSWORD': '$Sd45371845',
 
-#         'HOST': 'localhost',
+        'HOST': 'localhost',
 
-#         'PORT': '5432',
-#         }
-#      }
+        'PORT': '',
+        }
+     }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -142,9 +141,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-
-STATIC_URL = 'static/'
-STATIC_ROOT = '/usr/local/lsws/Example/html/demo/public/static'
+STATIC_URL = '/static/'
 
 '''SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
@@ -179,24 +176,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
 '''
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
