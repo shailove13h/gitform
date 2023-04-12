@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 })
 
             })
-            document.title = `${this.value} - Google Forms CLONE`
+            document.title = `${this.value} - Data form`
             document.querySelectorAll(".input-form-title").forEach(ele => {
                 ele.value = this.value;
             })
