@@ -27,11 +27,6 @@ CSRF_TRUSTED_ORIGINS = ['https://localhost:80', 'https://127.0.0.1:8000']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-import socket
-
-
-
-
 
 ALLOWED_HOSTS = ['*']
 
@@ -147,7 +142,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+
+STATIC_URL = 'static/'
+STATIC_ROOT = '/usr/local/lsws/Example/html/demo/public/static'
 
 '''SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
@@ -198,10 +195,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-STATIC_ROOT = '/usr/local/lsws/Example/html/demo/public/static'
