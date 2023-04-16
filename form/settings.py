@@ -20,7 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '5&41du-&cv-cazt$r@k84h*gz-s!*jk2b)131ek^2-lpou#2y4'
+# SECRET_KEY = '5&41du-&cv-cazt$r@k84h*gz-s!*jk2b)131ek^2-lpou#2y4'
+
+SECRET_KEY = 'I}<K>n.UZ+@FurgugXPkA&O#(M-!E*I6~C1M^;OPB%+b-lvV}^'
 CSRF_TRUSTED_ORIGINS = ['https://localhost:80', 'https://127.0.0.1:8000']
 
 
@@ -142,6 +144,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# STATIC_ROOT = '/usr/local/lsws/Example/html/gitform/public/static'
 
 '''SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True

@@ -85,8 +85,8 @@ def view_data(request, code):
                     row.append(choice)
 
                 else:
-                    data = answer.answer
-                    row.append(str(data))
+                    
+                    row.append(answer.answer)
                     
             else:
                 row.append('')

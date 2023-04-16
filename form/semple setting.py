@@ -20,21 +20,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '5&41du-&cv-cazt$r@k84h*gz-s!*jk2b)131ek^2-lpou#2y4'
-CSRF_TRUSTED_ORIGINS = ['http://localhost:80000', 'http://127.0.0.1']
+# SECRET_KEY = '5&41du-&cv-cazt$r@k84h*gz-s!*jk2b)131ek^2-lpou#2y4'
+
+SECRET_KEY = 'I}<K>n.UZ+@FurgugXPkA&O#(M-!E*I6~C1M^;OPB%+b-lvV}^'
+CSRF_TRUSTED_ORIGINS = ['https://localhost:80', 'https://127.0.0.1:8000']
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-import socket
 
+ALLOWED_HOSTS = ['*']
 
-
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("127.0.0.1", 8000))
-
-ALLOWED_HOSTS = [s.getsockname()[0], '*','127.0.0.1', 'localhost']
-
-s.close()
 
 
 # Application definition
@@ -83,15 +80,29 @@ WSGI_APPLICATION = 'form.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/3.1/ref/settings/#databases  freeforms
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+        'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
+        'NAME': 'dataform ',
+
+        'USER': 'shailoveform',
+
+        'PASSWORD': '$Sd45371845',
+
+        'HOST': 'localhost',
+
+        'PORT': '',
+        }
+     }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -117,9 +128,10 @@ AUTH_USER_MODEL = "index.User"
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
+
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -132,6 +144,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_ROOT = '/usr/local/lsws/Example/html/gitform/public/static'
 
 '''SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
