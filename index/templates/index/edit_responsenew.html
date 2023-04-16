@@ -8,6 +8,7 @@
 {% block title %}{{form.title}} ~ Data Forms {% endblock %}
 {% block script %}
 <script src="{% static 'index/viewform.js' %}" defer></script>
+<script src="https://unpkg.com/htmx.org@1.8.6"></script>
 {% endblock %}
 {% block body %}
 <div class="container-fluid">
@@ -36,7 +37,7 @@
             <h1 class="question-title txtClr" oncopy = "return false">{{question.question}} {% if question.required %}<span class="require-star">*</span>{% endif %}</h1>
             {% endif %}
             {% if question.question_type == "short" %}
-                <input type="text" name="{{question.id}}" class="short-answer" placeholder = "Your answer" {% if question.required %} required {% endif %}
+                <input type="text" name="{{question.id}}" class="short-answer" placeholder = "Your answer" 
                 value="{{response|get_response:question.pk}}">
             {% elif question.question_type == "paragraph" %}
                 <textarea name="{{question.id}}" placeholder="Your answer" class="long-answer textarea-adjust" 
@@ -66,12 +67,74 @@
             {% elif question.question_type == "districts" %}
                  
                  
-                <div class="multiple-choice">
-                    
-                    
+            <div class="multiple-choice">
+                  
+                <select class="custum-select mb-4"
+                    name="{{question.id}}" 
+                   hx-get = "{% url 'edittalukas' %}"
+                   hx-trigger="change"
+                   hx-target="#talukas"> 
+                    <option selected value="{{district.id}}"> {{district.name}}</option>
+                    {% for d in alldistrict %}
+                    <option value="{{ d.pk }}"> {{d.name }} </option>
+                    {% endfor %}
+                </select>
+
+                
                 </div>
             
+                {% elif question.question_type == "talukas" %}
+                
+                       
+                <div id="talukas" name= "{{question.id}}" >
+                  
+                    {% include 'partials/edittaluka.html'%}
 
+               
+                </div>
+                
+                {% elif question.question_type == "blocks" %}
+                
+                        
+                <div id="blockes" name= "{{question.id}}" >
+                    {% include 'partials/editblock.html'%}
+                </div>    
+                {% elif question.question_type == "sectors" %}
+                
+                        
+                <div id="sectors" name= "{{question.id}}" >
+                    {% include 'partials/editsector.html'%}
+                </div>  
+                {% elif question.question_type == "villages" %}
+                
+                        
+                <div id="villages" name= "{{question.id}}" >
+                    {% include 'partials/editvillage.html'%}
+                </div>  
+
+                {% elif question.question_type == "awcs" %}
+                
+                        
+                <div id="awcs" name= "{{question.id}}" >
+                    {% include 'partials/editawc.html'%}
+                </div>  
+
+                {% elif question.question_type == "mobile" %}
+                
+                        
+                <div id="{{question.id}}" name= "{{question.id}}" >
+                
+                   <input type="text" value="{{response|get_response:question.pk}}" pattern="[1-9]{1}[0-9]{9}"title="Please enter exactly 10 digits" name="{{question.id}}" class="short-answer" placeholder = "Mobile Number" {% if question.required %} required {% endif %}>
+           
+                </div>  
+                {% elif question.question_type == "date" %}
+                
+                        
+                <div id="{{question.id}}" name= "{{question.id}}" >
+                   
+                    <input type="date" "title="Please enter Date" name="{{question.id}}" class="short-answer" value="{{response|get_response:question.pk}}" placeholder = "Date" {% if question.required %} required {% endif %} required>
+            
+                </div>  
 
             {% endif %}
         </div>

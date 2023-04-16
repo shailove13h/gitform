@@ -23,24 +23,37 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <table id="myTable" class="table table-striped"  border="1px solid">
+            <table id="myTable" class="table table-striped" border="1px solid">
                 <thead>
-                    <tr>
-                        {% for header in headers %}
-                        <th class="sortable">{{ header }}</th>
-                        {% endfor %}
-                    </tr>
+                  <tr>
+                    <th class="sortable">Edit</th>
+                    {% for header in headers %}
+                    <th class="sortable">{{ header }}</th>
+                    {% endfor %}
+                  </tr>
                 </thead>
                 <tbody>
-                    {% for row in data %}
-                    <tr>
-                        {% for cell in row %}
-                        <td>{{ cell }}</td>
-                        {% endfor %}
-                    </tr>
+                  {% for row in data %}
+                  <tr>
+                    
+                    
+                    {% for cell in row %}
+                    {% if forloop.counter0 == 0 %}
+                    <td> <a href="{% url 'edit_response' form.code cell %}" class="edit-response-link">Edit response</a></td>
+                    
+                    {% elif forloop.counter0 > 0 %}
+
+                    <td>{{ cell }}</td>
+                    {%endif%}
                     {% endfor %}
+
+                  </tr>
+                 
+                  
+                  {% endfor %}
                 </tbody>
-            </table>
+              </table>
+              
         </div>
     </div>
 </div>

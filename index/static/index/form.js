@@ -520,6 +520,18 @@ document.addEventListener("DOMContentLoaded", () => {
                                 
                             </div>`
                                
+                            }else if(this.value === "mobile"){
+                                let ele = document.createElement("div");
+                                ele.innerHTML = `<div class="answers" data-id="${this.dataset.id}">
+                                <textarea class="short-answer" disabled placeholder="Mobile Number input" ></textarea>
+                            </div>`
+                                this.parentNode.insertBefore(ele, this.parentNode.childNodes[4])
+                            }else if(this.value === "date"){
+                                let ele = document.createElement("div");
+                                ele.innerHTML = `<div class="answers" data-id="${this.dataset.id}">
+                                <textarea class="long-answer" disabled placeholder="Date input" ></textarea>
+                            </div>`
+                                this.parentNode.insertBefore(ele, this.parentNode.childNodes[4])
                             }else if(this.value === "talukas"){
                                 let ele = document.createElement("div");
                                 ele.innerHTML = `<div class="answers" data-id="${this.dataset.id}">
@@ -578,6 +590,9 @@ document.addEventListener("DOMContentLoaded", () => {
             <input type="text" data-id="${result["question"].id}" class="question-title edit-on-click input-question" value="${result["question"].question}">
             <select class="question-type-select input-question-type" data-id="${result["question"].id}" data-origin_type = "${result["question"].question_type}">
                 <option value="short">Short answers</option>
+                <option value="mobile">Mobile Number</option>
+                <option value="date">Date</option>
+                <option value="aadhar">Aadhar Number</option>
                 <option value="paragraph">Paragraph</option>
                 <option value="multiple choice" selected>Multiple choice</option>
                 <option value="checkbox">Checkbox</option>

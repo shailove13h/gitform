@@ -1,0 +1,10 @@
+<select class="custum-select mb-4"
+       name="sectors" 
+       hx-get = "{% url 'editawcs' %}"
+       hx-trigger="change"
+       hx-target= "#awcs"> 
+       <option value="{{sector.id }}" selected> {{sector.name }}</option>
+    {% for s in sectors %}
+    <option value="{{ s.pk }}"> {{s.name }} </option>
+    {% endfor %}
+   </select>

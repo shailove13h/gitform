@@ -64,7 +64,7 @@ class Questions(models.Model):
     score = models.IntegerField(blank = True, default=0)
     feedback = models.CharField(max_length = 5000, null = True)
     choices = models.ManyToManyField(Choices, related_name = "choices")
-    districts = models.ManyToManyField(District, related_name = "districs")
+    districts = models.ManyToManyField(District, related_name = "districts")
     blocks = models.ManyToManyField(Block, related_name = "blocks")
     sectors = models.ManyToManyField(Sector, related_name = "sectors")
     villages = models.ManyToManyField(Village, related_name = "villages")

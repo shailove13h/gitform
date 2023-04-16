@@ -6,8 +6,9 @@ from django.contrib.auth import authenticate, login, logout
 from .models import User, Choices, Questions, Answer, Form, Responses,District,Taluka,Block,Sector,AWC,Village
 from django.core import serializers
 import json
-import random
+import random,re
 import string
+from datetime import datetime, date
 from django.views.generic import ListView, CreateView, UpdateView
 from django.urls import reverse_lazy
 
@@ -19,62 +20,142 @@ from django.shortcuts import render, get_object_or_404
 from .models import Form, Responses
 
 
+def responsedetails(request, code, response_code):
+    form = Form.objects.get(code=code)
+    responses = Responses.objects.filter(response_code=response_code)
+
+    answers_by_question = {}
+
+    for response in responses:
+        answers = Answer.objects.filter(response=response)
+        for answer in answers:
+            question_id = answer.answer_to.id
+            question_text = answer.answer_to.question
+            question_type = answer.answer_to.question_type
+            print(question_text)
+            if question_type == "districts":
+                answer_text = District.objects.filter(id= answer.answer).first()
+            elif question_type == "talukas":
+                 answer_text = Taluka.objects.filter(id= answer.answer).first()
+            elif question_type == "blocks":
+                answer_text = Block.objects.filter(id= answer.answer).first()
+
+            elif question_type == "sectors":
+                answer_text = Sector.objects.filter(id= answer.answer).first()
+            elif question_type == "villages":
+                answer_text = Village.objects.filter(id= answer.answer).first()
+
+            elif question_type == "awcs":
+                answer_text = AWC.objects.filter(id= answer.answer).first()
+
+            else: 
+                answer_text = answer.answer
+            if question_id in answers_by_question:
+                answers_by_question[question_id]['answers'].append(answer_text)
+            else:
+                answers_by_question[question_id] = {'question_text': question_text,'question_type':question_type,'answers': [answer_text]}
+            response = response
+    context = {'form': form, 'answers_by_question': answers_by_question,'response_code':response_code ,'response':response}
+    return render(request, 'index/edit_responsenew.html', context)
+
+
 def view_data(request, code):
 
     form = get_object_or_404(Form, code=code)
     questions = form.questions.all().order_by('id')
     headers = [question.question for question in questions]
     data = []
-
+    exportdata = []
+    responseform = []
     for response in form.response_to.order_by('-id').all():
         row = []
+        exportrow = []
+       
+        responseform.append(response.response_code)
+        row.append(response.response_code)
         for question in questions:
             answer = response.response.filter(answer_to=question).first()
-            
-            print("printing answer ")
-            print(answer)
-            
-                
-
+        
             if answer:
-                if question.question_type == "districts":
-            
+                
+                if question.question_type == "districts" :
+                    anscheck = answer.answer
                     # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                    choice = District.objects.filter(id=answer.answer).first()
-                    
+                    if answer.answer !="":
+
+                        choice = District.objects.filter(id=answer.answer).first()
+                    else:
+                        choice = District.objects.filter(id=0).first()
                     row.append(str(choice))
+                    exportrow.append(str(choice))
+
                 elif question.question_type == "talukas":
             
-                    # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                    choice = Taluka.objects.filter(id=answer.answer).first()
-                    
+                    if answer.answer !="":
+
+                        choice = Taluka.objects.filter(id=answer.answer).first()
+                    else:
+                        choice = Taluka.objects.filter(id=0).first()
                     row.append(str(choice))
+                    exportrow.append(str(choice))
+                    
                 elif question.question_type == "blocks":
             
-                    # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                    choice = Block.objects.filter(id=answer.answer).first()
-                    
+                    if answer.answer !="":
+
+                        choice = Block.objects.filter(id=answer.answer).first()
+                    else:
+                        choice =""
                     row.append(str(choice))
+                    exportrow.append(str(choice))
+                    
 
                 elif question.question_type == "sectors":
             
-                    # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                    choice = Sector.objects.filter(id=answer.answer).first()
-                    
+                    if answer.answer !="":
+
+                        choice = Sector.objects.filter(id=answer.answer).first()
+                    else:
+                        choice =""
                     row.append(str(choice))
+                    exportrow.append(str(choice))
+                    
                 elif question.question_type == "villages":
             
-                    # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                    choice = Village.objects.filter(id=answer.answer).first()
-                    
+                    if answer.answer !="":
+
+                        choice = Village.objects.filter(id=answer.answer).first()
+                    else:
+                        choice =""
                     row.append(str(choice))
+                    exportrow.append(str(choice))
+                    
 
                 elif question.question_type == "awcs":
             
-                    # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                    choice = AWC.objects.filter(id=answer.answer).first()
-                    
+                    if answer.answer !="":
+
+                        choice = AWC.objects.filter(id=answer.answer).first()
+                    else:
+                        choice =""
                     row.append(str(choice))
+                    exportrow.append(str(choice))
+
+                elif question.question_type == "date":
+            
+                    choice = answer.answer
+
+                    print("date from databse")
+                    print(choice)
+                    choice  = re.sub(r'(\d{4})-(\d{1,2})-(\d{1,2})', '\\3-\\2-\\1', choice)
+                    # formatDate = datetime(choice)
+                    # formatDate = formatDate.strftime("%d/%B/%Y")
+                    # print("new date formqte from databse")
+                    # print(formatDate)
+                    row.append(str(choice))
+                    exportrow.append(str(choice))
+                    
+                    
 
                 elif question.question_type == "multiple choice" or question.question_type == "checkbox":
             
@@ -83,15 +164,22 @@ def view_data(request, code):
                     choice = answer.answer_to.choices.get(id = answer.answer).choice
                    
                     row.append(choice)
+                    exportrow.append(str(choice))
 
                 else:
                     
                     row.append(answer.answer)
+                    exportrow.append(str(choice))
+                    
                     
             else:
                 row.append('')
+                exportrow.append('')
         data.append(row)
 
+        exportdata.append(exportrow)
+        print("printing data")
+        print(data)
     if 'export' in request.POST:
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment; filename="responses.xlsx"'
@@ -99,16 +187,19 @@ def view_data(request, code):
         worksheet = workbook.active
         worksheet.title = 'Responses'
         for index, header in enumerate(headers):
+            print(index)
             worksheet.cell(row=1, column=index+1, value=header)
 
             
-        for row_index, row in enumerate(data):
-            for column_index, cell in enumerate(row):
+        for row_index, exportrow in enumerate(exportdata):
+            for column_index, cell in enumerate(exportrow):
+                print("printing cell")
+                print(cell)
                 worksheet.cell(row=row_index+2, column=column_index+1, value=cell)
         workbook.save(response)
         return response
 
-    return render(request, 'index/form_newresponse.html', {'form': form, 'headers': headers, 'data': data})
+    return render(request, 'index/form_newresponse.html', {'form': form, 'headers': headers,'response':responseform, 'data': data})
     # return render(request, 'index/form_newresponse.html', context)
 
 
@@ -715,6 +806,30 @@ def talukas(request):
           }
     return render(request, "partials/taluka.html", context) 
 
+def edittalukas(request):
+    print("taluka methos call")
+    if request.htmx:
+        
+        for i in request.GET:
+            print("check values in GET methos")
+            print(i)
+
+        data = request.GET.getlist(i)
+        print("printing the id which is unkone name")
+        print(data)
+    district= request.GET.get('districts')
+
+    
+    talukas = Taluka.objects.filter(district = data[0])
+    print(talukas)
+    context = {"talukas" : talukas
+          }
+    return render(request, "partials/edittaluka.html", context) 
+
+
+
+
+
 def blockes(request):
     print("Block methos call")
     if request.htmx:
@@ -733,6 +848,26 @@ def blockes(request):
     context = {"blockes" : blockes
           }
     return render(request, "partials/block.html", context) 
+
+def editblockes(request):
+    print("editBlock methos call")
+    if request.htmx:
+        print("rewust is htmx")
+        print(request.GET)
+        for i in request.GET:
+            print("check values in GET methos")
+            print(i)
+
+        data = request.GET.getlist(i)
+        
+        taluka= request.GET.get('talukas')
+
+        
+        blockes = Block.objects.filter(taluka= data[0])
+        
+    context = {"blockes" : blockes
+          }
+    return render(request, "partials/editblock.html", context) 
 
 def sectors(request):
     print("Sector methos call")
@@ -754,6 +889,47 @@ def sectors(request):
           }
     return render(request, "partials/sector.html", context) 
 
+def editsectors(request):
+    print("Sector methos call")
+    if request.htmx:
+        
+        for i in request.GET:
+            print("check values in GET methos")
+            print(i)
+
+        data = request.GET.getlist(i)
+        print("printing the id which is unkone name")
+        print(data)
+    block= request.GET.get('blocks')
+
+    
+    sectors = Sector.objects.filter(block = data[0])
+    
+    context = {"sectors" : sectors
+          }
+    return render(request, "partials/editsector.html", context) 
+
+def editvillages(request):
+    print("village methos call")
+    if request.htmx:
+        
+        for i in request.GET:
+            print("check values in GET methos")
+            print(i)
+
+        data = request.GET.getlist(i)
+        print("printing the id which is unkone name")
+        print(data)
+    sectors= request.GET.get('sectors')
+
+    
+    villages = Village.objects.filter(block = data[0])
+    
+    context = {"villages" : villages
+          }
+    return render(request, "partials/editvillage.html", context) 
+
+
 def awcs(request):
     print("awc methos call")
     if request.htmx:
@@ -773,6 +949,25 @@ def awcs(request):
     context = {"awcs" : awcs
           }
     return render(request, "partials/awc.html", context) 
+def editawcs(request):
+    print("awc methos call")
+    if request.htmx:
+        
+        for i in request.GET:
+            print("check values in GET methos")
+            print(i)
+
+        data = request.GET.getlist(i)
+        print("printing the id which is unkone name")
+        print(data)
+    sector= request.GET.get('sectors')
+
+    print(sector)
+    awcs = AWC.objects.filter(sector= data[0])
+    print(awcs)
+    context = {"awcs" : awcs
+          }
+    return render(request, "partials/editawc.html", context) 
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -886,9 +1081,13 @@ def responses(request, code):
             districtAnswered[question.question] = districtAnswered.get(question.question, {})
             
             for answer in answers:
-            
-                # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                choice = District.objects.filter(id=answer.answer).first()
+                if answer.answer=="" :
+
+                    choice = ""
+                else:
+                
+
+                    choice = District.objects.filter(id=answer.answer).first()
                 
                 districtAnswered[question.question][choice] = districtAnswered.get(question.question, {}).get(choice, 0) + 1
             
@@ -897,10 +1096,13 @@ def responses(request, code):
             talukaAnswered[question.question] = talukaAnswered.get(question.question, {})
             
             for answer in answers:
-            
-                # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                choice = Taluka.objects.filter(id=answer.answer).first()
+                if answer.answer=="" :
+
+                    choice = ""
+                else:
                 
+
+                    choice = Taluka.objects.filter(id=answer.answer).first()
                 talukaAnswered[question.question][choice] = talukaAnswered.get(question.question, {}).get(choice, 0) + 1
             
         elif question.question_type == "blocks" :
@@ -908,10 +1110,13 @@ def responses(request, code):
             blockAnswered[question.question] = blockAnswered.get(question.question, {})
             
             for answer in answers:
-            
-                # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                choice = Block.objects.filter(id=answer.answer).first()
+                if answer.answer=="" :
+
+                    choice = ""
+                else:
                 
+
+                    choice = Block.objects.filter(id=answer.answer).first() 
                 blockAnswered[question.question][choice] = blockAnswered.get(question.question, {}).get(choice, 0) + 1
             
         elif question.question_type == "sectors" :
@@ -919,10 +1124,13 @@ def responses(request, code):
             sectorAnswered[question.question] = sectorAnswered.get(question.question, {})
             
             for answer in answers:
-            
-                # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                choice = Sector.objects.filter(id=answer.answer).first()
+                if answer.answer=="" :
+
+                    choice = ""
+                else:
                 
+
+                    choice = Sector.objects.filter(id=answer.answer).first()
                 sectorAnswered[question.question][choice] = sectorAnswered.get(question.question, {}).get(choice, 0) + 1
             
         elif question.question_type == "villages" :
@@ -930,10 +1138,13 @@ def responses(request, code):
             villageAnswered[question.question] = villageAnswered.get(question.question, {})
             
             for answer in answers:
-            
-                # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                choice = District.objects.filter(id=answer.answer).first()
+                if answer.answer=="" :
+
+                    choice = ""
+                else:
                 
+
+                    choice = Village.objects.filter(id=answer.answer).first()
                 villageAnswered[question.question][choice] = villageAnswered.get(question.question, {}).get(choice, 0) + 1
             
         elif question.question_type == "awcs" :
@@ -941,10 +1152,13 @@ def responses(request, code):
             awcAnswered[question.question] = awcAnswered.get(question.question, {})
             
             for answer in answers:
-            
-                # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                choice = AWC.objects.filter(id=answer.answer).first()
+                if answer.answer=="" :
+
+                    choice = ""
+                else:
                 
+
+                    choice = AWC.objects.filter(id=answer.answer).first()
                 awcAnswered[question.question][choice] = awcAnswered.get(question.question, {}).get(choice, 0) + 1
             
         responsesSummary.append({"question": question, "answers":answers })
@@ -1046,11 +1260,14 @@ def response(request, code, response_code):
 
 def edit_response(request, code, response_code):
     formInfo = Form.objects.filter(code = code)
+    
     #Checking if form exists
     if formInfo.count() == 0:
         return HttpResponseRedirect(reverse('404'))
     else: formInfo = formInfo[0]
     response = Responses.objects.filter(response_code = response_code, response_to = formInfo)
+    
+    # choice = District.objects.filter(id=answer.answer).first()
     if response.count() == 0:
         return HttpResponseRedirect(reverse('404'))
     else: response = response[0]
@@ -1059,6 +1276,110 @@ def edit_response(request, code, response_code):
             return HttpResponseRedirect(reverse("login"))
         if response.responder != request.user:
             return HttpResponseRedirect(reverse('403'))
+
+    # Accessing answer for the question type "districts"
+    alldistrict = District.objects.all()
+    district_answer = Answer.objects.filter(answer_to__question_type='districts', response=response).first()
+    district = None
+
+    # Checking if answer exists for the question type "districts"
+    if district_answer:
+        district_id = district_answer.answer
+        print("district id is blacnk")
+        print(district_answer)
+        if district_id=="":
+            print("district id is blacnk")
+            print(district_answer)
+            district= ""
+        else: 
+            district = District.objects.filter(id=district_id).first()
+
+     # Accessing answer for the question type "taluka"
+    
+    taluka_answer = Answer.objects.filter(answer_to__question_type='talukas', response=response).first()
+    taluka = None
+    print("taluka name none : ")
+    print(taluka)
+    # Checking if answer exists for the question type "taluka"
+    if taluka_answer:
+        taluka_id = taluka_answer.answer
+        if taluka_id=="":
+            
+      
+            taluka= ""
+        else:
+            taluka = Taluka.objects.filter(id=taluka_id).first()
+            
+
+    # Accessing answer for the question type "block"
+    allblock = Block.objects.all()
+    block_answer = Answer.objects.filter(answer_to__question_type='blocks', response=response).first()
+    block = None
+    
+    # Checking if answer exists for the question type "block"
+    if block_answer:
+        block_id = block_answer.answer
+        if block_id=="":
+            block= ""
+        else:
+            block = Block.objects.filter(id=block_id).first()
+        
+    print(block)
+
+     # Accessing answer for the question type "sector"
+    allsector = Sector.objects.all()
+    sector_answer = Answer.objects.filter(answer_to__question_type='sectors', response=response).first()
+    sector = None
+   
+
+
+     # Checking if answer exists for the question type "sector"
+    if sector_answer:
+        sector_id = sector_answer.answer
+        if sector_id=="":
+            
+            sector= ""
+        else:
+            sector = Block.objects.filter(id=sector_id).first()
+        
+     # Accessing answer for the question type "village"
+    allvillage = Village.objects.all()
+    village_answer = Answer.objects.filter(answer_to__question_type='villages', response=response).first()
+    village = None
+     # Checking if answer exists for the question type "village"
+    if village_answer:
+        village_id = village_answer.answer
+        if village_id=="":
+            village= ""
+        else:
+            village = Village.objects.filter(id=village_id).first()
+        print("block name")
+        print(village)
+    print(village)
+
+     # Accessing answer for the question type "awcs"
+    allawc = AWC.objects.all()
+    awc_answer = Answer.objects.filter(answer_to__question_type='awcs', response=response).first()
+    awc = None
+    print("village name none : ")
+    print(awc)
+
+
+     # Checking if answer exists for the question type "awcs"
+    if awc_answer:
+        awc_id = awc_answer.answer
+        if awc_id=="":
+            print("id is blacnk")
+            print(awc_id)
+      
+            awc= ""
+        else:
+            awc = AWC.objects.filter(id=awc_id).first()
+        print("block name")
+        print(awc)
+    print(awc)
+
+    # below is if response edited and sumbimted for data save 
     if request.method == "POST":
         if formInfo.authenticated_responder and not response.responder:
             response.responder = request.user
@@ -1073,7 +1394,26 @@ def edit_response(request, code, response_code):
             #Excluding csrf token and email address
             if i == "csrfmiddlewaretoken" or i == "email-address":
                 continue
-            question = formInfo.questions.get(id = i)
+            # check type for district taluka block sector
+            if i=="districts":
+                question = formInfo.questions.get(question_type = i)
+                
+            elif i=="talukas":
+                question = formInfo.questions.get(question_type = i)
+            elif i=="blocks":
+                question = formInfo.questions.get(question_type = i)
+            elif i=="sectors":
+                question = formInfo.questions.get(question_type = i)
+            elif i=="villages":
+                question = formInfo.questions.get(question_type = i)
+            elif i=="awcs":
+                question = formInfo.questions.get(question_type = i)
+                
+            else:
+
+                question = formInfo.questions.get(id = i)
+
+            # question = formInfo.questions.get(id = i)
             for j in request.POST.getlist(i):
                 answer = Answer(answer=j, answer_to = question)
                 answer.save()
@@ -1086,9 +1426,17 @@ def edit_response(request, code, response_code):
                 "form": formInfo,
                 "code": response.response_code
             })
-    return render(request, "index/edit_response.html", {
+    return render(request, "index/edit_responsenew.html", {
         "form": formInfo,
-        "response": response
+        "response": response,
+        "district":district,
+        "alldistrict" :alldistrict,
+        "taluka" :taluka,
+        "blocked" : block,
+        "sector" : sector,
+        "village" : village,
+        "awc" : awc
+
     })
 
 def contact_form_template(request):

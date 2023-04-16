@@ -33,6 +33,11 @@
             <h1 class="question-title txtClr">{{question.question}} {% if question.required %}<span class="require-star">*</span>{% endif %}</h1>
             {% if question.question_type == "short" %}
                 <input type="text" name="{{question.id}}" class="short-answer" placeholder = "Your answer" {% if question.required %} required {% endif %}>
+            {% elif question.question_type == "mobile" %}
+            <input type="text" pattern="[1-9]{1}[0-9]{9}"title="Please enter exactly 10 digits" name="{{question.id}}" class="short-answer" placeholder = "Mobile Number" {% if question.required %} required {% endif %} required>
+            {% elif question.question_type == "date" %}
+            <input type="date" "title="Please enter Date" name="{{question.id}}" class="short-answer" placeholder = "Date" {% if question.required %} required {% endif %} required>
+            
             {% elif question.question_type == "paragraph" %}
                 <textarea name="{{question.id}}" placeholder="Your answer" class="long-answer textarea-adjust" {% if question.required %} required {% endif %}></textarea>
             {% elif question.question_type == "multiple choice" %}

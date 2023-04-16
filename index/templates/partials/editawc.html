@@ -1,0 +1,6 @@
+<select class="custum-select mb-4" name="awcs"> 
+    <option  value="{{ awc.id }}" selected> {{ awc.name }}</option>
+    {% for a in awcs %}
+    <option value="{{ a.pk }}"> {{a.name }} </option>
+    {% endfor %}
+   </select>
