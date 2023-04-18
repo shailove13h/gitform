@@ -135,7 +135,13 @@
                     <input type="date" "title="Please enter Date" name="{{question.id}}" class="short-answer" value="{{response|get_response:question.pk}}" placeholder = "Date" {% if question.required %} required {% endif %} required>
             
                 </div>  
-
+                {% elif question.question_type == "aadhar" %}
+                
+                        
+                <div id="{{question.id}}" name= "{{question.id}}" >
+                    <input input type="text" pattern="\d{12}" title="Please enter a 12-digit number" name="{{question.id}}" class="short-answer"value="{{response|get_response:question.pk}}" placeholder = "Aadhar number" {% if question.required %} required {% endif %} required>
+           
+                </div>  
             {% endif %}
         </div>
         {% endfor %}

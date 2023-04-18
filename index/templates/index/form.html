@@ -86,18 +86,22 @@
         <div class="margin-top-bottom box question-box question" data-id="{{question.id}}">
             <input type="text" data-id="{{question.id}}" class="question-title edit-on-click input-question" value="{{question.question}}">
             <select class="question-type-select input-question-type" data-id="{{question.id}}" data-origin_type = "{{question.question_type}}">
-                <option value="short" {% if question.question_type == "short" %}selected{% endif %}>Short answer</option>
-                <option value="mobile" {% if question.question_type == "mobile" %}selected{% endif %}>Mobile Number</option>
-                <option value="date" {% if question.question_type == "date" %}selected{% endif %}>Date </option>
-                <option value="paragraph" {% if question.question_type == "paragraph" %}selected{% endif %}>Paragraph</option>
-                <option value="multiple choice" {% if question.question_type == "multiple choice" %}selected{% endif %}>Multiple choice</option>
-                <option value="checkbox" {% if question.question_type == "checkbox" %}selected{% endif %}>Checkbox</option>
                 <option value="districts" {% if question.question_type == "districts" %}selected{% endif %}>District</option>
                 <option value="talukas" {% if question.question_type == "talukas" %}selected{% endif %}>Taluka</option>
                 <option value="blocks" {% if question.question_type == "blocks" %}selected{% endif %}>Block</option>
                 <option value="sectors" {% if question.question_type == "sectors" %}selected{% endif %}>Sector</option>
-                <option value="villages" {% if question.question_type == "villages" %}selected{% endif %}>Sector</option>
+                <!-- <option value="villages" {% if question.question_type == "villages" %}selected{% endif %}>Village</option> -->
                 <option value="awcs" {% if question.question_type == "awcs" %}selected{% endif %}>AWC</option>
+                <option value="short" {% if question.question_type == "short" %}selected{% endif %}>Short answer</option>
+                <option value="mobile" {% if question.question_type == "mobile" %}selected{% endif %}>Mobile Number</option>
+                <option value="aadhar" {% if question.question_type == "aadhar" %}selected{% endif %}>Aadhar Number</option>
+                <option value="date" {% if question.question_type == "date" %}selected{% endif %}>Date </option>
+                
+                <option value="multiple choice" {% if question.question_type == "multiple choice" %}selected{% endif %}>Multiple choice</option>
+                <option value="checkbox" {% if question.question_type == "checkbox" %}selected{% endif %}>Checkbox</option>
+
+                <option value="paragraph" {% if question.question_type == "paragraph" %}selected{% endif %}>Paragraph</option>
+               
             </select>
             {% if question.question_type == "multiple choice" %}
             <div class="choices" data-id="{{question.id}}">
@@ -136,6 +140,10 @@
             {% elif question.question_type == "short" %}
             <div class="answers" data-id="{{question.id}}">
                 <input type ="text" class="short-answer" disabled placeholder="Short answer text" />
+            </div>
+            {% elif question.question_type == "aadhar" %}
+            <div class="answers" data-id="{{question.id}}">
+                <input type ="text" class="short-answer" disabled placeholder="Aadhar Number text" />
             </div>
             {% elif question.question_type == "paragraph" %}
             <div class="answers" data-id="{{question.id}}">

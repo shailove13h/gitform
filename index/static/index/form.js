@@ -526,6 +526,12 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <textarea class="short-answer" disabled placeholder="Mobile Number input" ></textarea>
                             </div>`
                                 this.parentNode.insertBefore(ele, this.parentNode.childNodes[4])
+                            }else if(this.value === "aadhar"){
+                                let ele = document.createElement("div");
+                                ele.innerHTML = `<div class="answers" data-id="${this.dataset.id}">
+                                <textarea class="short-answer" disabled placeholder="Aadhar Number input" ></textarea>
+                            </div>`
+                                this.parentNode.insertBefore(ele, this.parentNode.childNodes[4])
                             }else if(this.value === "date"){
                                 let ele = document.createElement("div");
                                 ele.innerHTML = `<div class="answers" data-id="${this.dataset.id}">
@@ -589,19 +595,22 @@ document.addEventListener("DOMContentLoaded", () => {
             ele.innerHTML = `
             <input type="text" data-id="${result["question"].id}" class="question-title edit-on-click input-question" value="${result["question"].question}">
             <select class="question-type-select input-question-type" data-id="${result["question"].id}" data-origin_type = "${result["question"].question_type}">
-                <option value="short">Short answers</option>
-                <option value="mobile">Mobile Number</option>
-                <option value="date">Date</option>
-                <option value="aadhar">Aadhar Number</option>
-                <option value="paragraph">Paragraph</option>
-                <option value="multiple choice" selected>Multiple choice</option>
-                <option value="checkbox">Checkbox</option>
                 <option value="districts" >District</option>
                 <option value="talukas" >Taluka</option>
                 <option value="blocks" >Block</option>
-                <option value="villages" >Village</option>
+                
                 <option value="sectors" >Sector</option>
-                <option value="awcs" >AWC</option>
+                <option value="awcs" >AWC</option>    
+                <option value="short">Short answers</option>
+                <option value="mobile">Mobile Number</option>
+                
+                <option value="aadhar">Aadhar Number</option>
+                <option value="date">Date</option>
+                
+                <option value="multiple choice" selected>Multiple choice</option>
+                <option value="checkbox">Checkbox</option>
+                <option value="paragraph">Paragraph</option>
+               
             </select>
             <div class="choices" data-id="${result["question"].id}">
                 <div class="choice">

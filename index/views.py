@@ -164,12 +164,12 @@ def view_data(request, code):
                     choice = answer.answer_to.choices.get(id = answer.answer).choice
                    
                     row.append(choice)
-                    exportrow.append(str(choice))
+                    exportrow.append(choice)
 
                 else:
                     
                     row.append(answer.answer)
-                    exportrow.append(str(choice))
+                    exportrow.append(answer.answer)
                     
                     
             else:

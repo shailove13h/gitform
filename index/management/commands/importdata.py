@@ -20,6 +20,6 @@ class Command(BaseCommand):
                 block, created = Block.objects.get_or_create(name=row['Block_name'], taluka=taluka)
                 sector, created = Sector.objects.get_or_create(name=row['Sector_name'], block=block)
                 village, created = Village.objects.get_or_create(name=row['Village'], sector=sector)
-                awc = AWC.objects.create(name=row['Awc_Name'], village=village, sector=sector)
+                awc = AWC.objects.create(name=row['Awc_Name'], village=village, sector=sector, awccode =row['Awc_ Code'])
                 self.stdout.write(self.style.SUCCESS(f'Successfully imported AWC {awc.name}'))
 
