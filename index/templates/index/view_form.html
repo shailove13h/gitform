@@ -27,7 +27,7 @@
         {% endif %}
         
 
-
+       
         {% for question in form.questions.all %}
         <div class="margin-top-bottom box question-box">
             <h1 class="question-title txtClr">{{question.question}} {% if question.required %}<span class="require-star">*</span>{% endif %}</h1>

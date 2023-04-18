@@ -141,6 +141,26 @@
             <div class="answers" data-id="{{question.id}}">
                 <input type ="text" class="short-answer" disabled placeholder="Short answer text" />
             </div>
+            {% elif question.question_type == "districts" %}
+            <div class="answers" data-id="{{question.id}}">
+                <input type ="text" class="short-answer" disabled placeholder="For District Selection" />
+            </div>
+            {% elif question.question_type == "talukas" %}
+            <div class="answers" data-id="{{question.id}}">
+                <input type ="text" class="short-answer" disabled placeholder="For Taluka Selection" />
+            </div>
+            {% elif question.question_type == "blocks" %}
+            <div class="answers" data-id="{{question.id}}">
+                <input type ="text" class="short-answer" disabled placeholder="For Block Selection" />
+            </div>
+            {% elif question.question_type == "sectors" %}
+            <div class="answers" data-id="{{question.id}}">
+                <input type ="text" class="short-answer" disabled placeholder="For Sector Selection" />
+            </div>
+            {% elif question.question_type == "awcs" %}
+            <div class="answers" data-id="{{question.id}}">
+                <input type ="text" class="short-answer" disabled placeholder="For AWC Selection" />
+            </div>
             {% elif question.question_type == "aadhar" %}
             <div class="answers" data-id="{{question.id}}">
                 <input type ="text" class="short-answer" disabled placeholder="Aadhar Number text" />
