@@ -24,10 +24,8 @@
 
     </div>
     <div class="margin-top-bottom box box-shadow bg-white">
-        <h1 class="form-title txtClr">See {{form.title}} Form Summary</h1>
-        <p class="text-label margin-left-right" style="margin-left: 10px;">Bellow Are Other Perosns Responses</p>
-        <h1>Form Response Summary</h1>
-        <h1>{{ form.title }} Response Summary</h1>
+        
+        <h1>{{ form.title }}</h1>
 
         <div class="modal-division">
           <a href="{% url 'view_data' form.code %}" class="btn view-score-btn">View Submited Data </a>

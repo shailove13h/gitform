@@ -1,0 +1,31 @@
+{% extends 'index/layout.html' %}
+{% load static %}
+{% block script %}
+<script src = "{% static 'index/index.js' %}" defer></script>
+<script src="{% static 'lib/cookie.min.js' %}" defer></script>
+{% endblock %}
+{% load static %}
+{% block body %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>About Us - ICDS Gujarat Data Form</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+</head>
+<body>
+	
+	<main>
+		<h2>About Us</h2>
+		<p>We are a team of developers who have created a Data form application for the ICDS Department in Gujarat. Our goal is to make it easier for supervisors, Block Level Staff and District Level staff to collect data from anganwadi workers and compile it at the district level.</p>
+		<p>With our application, supervisors can create a data form with select options based on previous selections, making it easier to filter data. They can also add short questions related to anganwadi workers and their beneficiaries, as well as date, mobile number, and aadhar fields. Once the form is complete, they can send a link to the anganwadi workers to fill in the information.</p>
+		<p>Our application is designed to reduce the burden of data entry at the sector and block level, and make it easier for district-level staff to compile data. With more than 57,000 anganwadi workers in Gujarat, our application will save supervisors time and effort.</p>
+	</main>
+	<footer>
+		<p>&copy; 2023 ICDS Gujarat Data Form</p>
+	</footer>
+</body>
+</html>
+
+{% endblock %}

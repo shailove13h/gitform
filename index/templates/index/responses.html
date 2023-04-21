@@ -42,6 +42,9 @@
         <span id="text-color" style="display: none;">{{form.text_color}}</span>
         <div class="margin-top-bottom box question-box" id="responses">
         {% if responses.count > 0 %}
+        <div class="modal-division">
+            <a href="{% url 'view_data' form.code %}" class="btn view-score-btn">View Submited Data </a>
+        </div>
             <h1 class="response-title">Individual Response:</h1>
             <ul>
                 {% for i in responses %}

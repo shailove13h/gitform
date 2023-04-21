@@ -212,7 +212,13 @@ def index(request):
     return render(request, "index/index.html", {
         "forms": forms
     })
-
+def home(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('home'))
+    forms = Form.objects.filter(creator = request.user)
+    return render(request, "index/index.html", {
+        "forms": forms
+    })
 # def blockes(request,code):
 #     blockes = Block.objects.all()
 #     context = {'blockes' : blockes,'form': formInfo,'code': code,
@@ -249,6 +255,10 @@ def login_view(request):
                 "message": "Invalid username and/or password"
             })
     return render(request, "index/login.html")
+
+def howtocreate(request):
+    return render(request, "index/howtocreate.html")
+
 
 def register(request):
     #Check if the user is logged in
