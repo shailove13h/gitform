@@ -1,34 +1,28 @@
 {% extends 'index/layout.html' %}
 {% load static %}
 {% block script %}
-<script src = "{% static 'index/index.js' %}" defer></script>
-<script src="{% static 'lib/cookie.min.js' %}" defer></script>
+
 {% endblock %}
 {% load static %}
 {% block body %}
-<div class="container-fluid">
+
    
     <div class="create-form">
         <div class="container">
             <p class="forms-label">Start a new form</p>
             <div class="form-template-box">
-                <img src = "{% static 'Icon/blank-form.png' %}" alt = "Blank form" title = "State Level Form" id="create-blank-form">
-                <span class="form-template-label">Create Your Data Form</span>
+                <img src = "{% static 'Icon/blank-form.png' %}" alt = "Blank form" title = "Blank form" id="create-blank-form">
+                <span class="form-template-label">Blank Form</span>
             </div>
-            <!-- <div class="form-template-box">
-                <img src = "{% static 'Icon/blank-form.png' %}" alt = "Blank form" title = "District Level" id="create-district-form">
-                <span class="form-template-label">District Level Form</span>
-            </div> -->
-
             <!-- <div class="form-template-box big-screen">
                 <img src = "{% static 'Template/contact_information.png' %}" alt = "Contact Information" title = "Contact Information" id="create-contact-form">
                 <span class="form-template-label">Contact Information</span>
-            </div>
-            <div class="form-template-box big-screen">
+            </div> -->
+            <!-- <div class="form-template-box big-screen">
                 <img src = "{% static 'Template/customer_feedback.png' %}" alt = "Customer Feedback" title = "Customer Feedback" id="create-customer-feedback">
                 <span class="form-template-label">Customer Feedback</span>
-            </div>
-            <div class="form-template-box big-screen">
+            </div> -->
+            <!-- <div class="form-template-box big-screen">
                 <img src = "{% static 'Template/customer_feedback.png' %}" alt = "Event Registration" title = "Event Registration" id="create-event-registration">
                 <span class="form-template-label">Event Registration</span>
             </div> -->
@@ -51,5 +45,5 @@
             {% endfor %}
         </div>
     </div>
-</div>
+
 {% endblock %}

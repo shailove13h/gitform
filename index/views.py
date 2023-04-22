@@ -60,146 +60,154 @@ def responsedetails(request, code, response_code):
 
 
 def view_data(request, code):
-
     form = get_object_or_404(Form, code=code)
-    questions = form.questions.all().order_by('id')
-    headers = [question.question for question in questions]
-    data = []
-    exportdata = []
-    responseform = []
-    for response in form.response_to.order_by('-id').all():
-        row = []
-        exportrow = []
+    if not request.user.is_authenticated :
+        return HttpResponseRedirect(reverse('login'))
+    elif not form.creator ==request.user:
+        print("user is not creator")
+        return HttpResponseRedirect(reverse('login'))
+    else:  
+        print("user is  creator")
+        form = get_object_or_404(Form, code=code)
        
-        responseform.append(response.response_code)
-        row.append(response.response_code)
-        for question in questions:
-            answer = response.response.filter(answer_to=question).first()
+        questions = form.questions.all().order_by('id')
+        headers = [question.question for question in questions]
+        data = []
+        exportdata = []
+        responseform = []
+        for response in form.response_to.order_by('-id').all():
+            row = []
+            exportrow = []
         
-            if answer:
+            responseform.append(response.response_code)
+            row.append(response.response_code)
+            for question in questions:
+                answer = response.response.filter(answer_to=question).first()
+            
+                if answer:
+                    
+                    if question.question_type == "districts" :
+                        anscheck = answer.answer
+                        # choice = answer.answer_to.choices.get(id = answer.answer).choice
+                        if answer.answer !="":
+
+                            choice = District.objects.filter(id=answer.answer).first()
+                        else:
+                            choice = District.objects.filter(id=0).first()
+                        row.append(str(choice))
+                        exportrow.append(str(choice))
+
+                    elif question.question_type == "talukas":
                 
-                if question.question_type == "districts" :
-                    anscheck = answer.answer
-                    # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                    if answer.answer !="":
+                        if answer.answer !="":
 
-                        choice = District.objects.filter(id=answer.answer).first()
+                            choice = Taluka.objects.filter(id=answer.answer).first()
+                        else:
+                            choice = Taluka.objects.filter(id=0).first()
+                        row.append(str(choice))
+                        exportrow.append(str(choice))
+                        
+                    elif question.question_type == "blocks":
+                
+                        if answer.answer !="":
+
+                            choice = Block.objects.filter(id=answer.answer).first()
+                        else:
+                            choice =""
+                        row.append(str(choice))
+                        exportrow.append(str(choice))
+                        
+
+                    elif question.question_type == "sectors":
+                
+                        if answer.answer !="":
+
+                            choice = Sector.objects.filter(id=answer.answer).first()
+                        else:
+                            choice =""
+                        row.append(str(choice))
+                        exportrow.append(str(choice))
+                        
+                    elif question.question_type == "villages":
+                
+                        if answer.answer !="":
+
+                            choice = Village.objects.filter(id=answer.answer).first()
+                        else:
+                            choice =""
+                        row.append(str(choice))
+                        exportrow.append(str(choice))
+                        
+
+                    elif question.question_type == "awcs":
+                
+                        if answer.answer !="":
+
+                            choice = AWC.objects.filter(id=answer.answer).first()
+                        else:
+                            choice =""
+                        row.append(str(choice))
+                        exportrow.append(str(choice))
+
+                    elif question.question_type == "date":
+                
+                        choice = answer.answer
+
+                        print("date from databse")
+                        print(choice)
+                        choice  = re.sub(r'(\d{4})-(\d{1,2})-(\d{1,2})', '\\3-\\2-\\1', choice)
+                        # formatDate = datetime(choice)
+                        # formatDate = formatDate.strftime("%d/%B/%Y")
+                        # print("new date formqte from databse")
+                        # print(formatDate)
+                        row.append(str(choice))
+                        exportrow.append(str(choice))
+                        
+                        
+
+                    elif question.question_type == "multiple choice" or question.question_type == "checkbox":
+                
+                        # choice = answer.answer_to.choices.get(id = answer.answer).choice
+                        
+                        choice = answer.answer_to.choices.get(id = answer.answer).choice
+                    
+                        row.append(choice)
+                        exportrow.append(choice)
+
                     else:
-                        choice = District.objects.filter(id=0).first()
-                    row.append(str(choice))
-                    exportrow.append(str(choice))
-
-                elif question.question_type == "talukas":
-            
-                    if answer.answer !="":
-
-                        choice = Taluka.objects.filter(id=answer.answer).first()
-                    else:
-                        choice = Taluka.objects.filter(id=0).first()
-                    row.append(str(choice))
-                    exportrow.append(str(choice))
-                    
-                elif question.question_type == "blocks":
-            
-                    if answer.answer !="":
-
-                        choice = Block.objects.filter(id=answer.answer).first()
-                    else:
-                        choice =""
-                    row.append(str(choice))
-                    exportrow.append(str(choice))
-                    
-
-                elif question.question_type == "sectors":
-            
-                    if answer.answer !="":
-
-                        choice = Sector.objects.filter(id=answer.answer).first()
-                    else:
-                        choice =""
-                    row.append(str(choice))
-                    exportrow.append(str(choice))
-                    
-                elif question.question_type == "villages":
-            
-                    if answer.answer !="":
-
-                        choice = Village.objects.filter(id=answer.answer).first()
-                    else:
-                        choice =""
-                    row.append(str(choice))
-                    exportrow.append(str(choice))
-                    
-
-                elif question.question_type == "awcs":
-            
-                    if answer.answer !="":
-
-                        choice = AWC.objects.filter(id=answer.answer).first()
-                    else:
-                        choice =""
-                    row.append(str(choice))
-                    exportrow.append(str(choice))
-
-                elif question.question_type == "date":
-            
-                    choice = answer.answer
-
-                    print("date from databse")
-                    print(choice)
-                    choice  = re.sub(r'(\d{4})-(\d{1,2})-(\d{1,2})', '\\3-\\2-\\1', choice)
-                    # formatDate = datetime(choice)
-                    # formatDate = formatDate.strftime("%d/%B/%Y")
-                    # print("new date formqte from databse")
-                    # print(formatDate)
-                    row.append(str(choice))
-                    exportrow.append(str(choice))
-                    
-                    
-
-                elif question.question_type == "multiple choice" or question.question_type == "checkbox":
-            
-                    # choice = answer.answer_to.choices.get(id = answer.answer).choice
-                    
-                    choice = answer.answer_to.choices.get(id = answer.answer).choice
-                   
-                    row.append(choice)
-                    exportrow.append(choice)
-
+                        
+                        row.append(answer.answer)
+                        exportrow.append(answer.answer)
+                        
+                        
                 else:
-                    
-                    row.append(answer.answer)
-                    exportrow.append(answer.answer)
-                    
-                    
-            else:
-                row.append('')
-                exportrow.append('')
-        data.append(row)
+                    row.append('')
+                    exportrow.append('')
+            data.append(row)
 
-        exportdata.append(exportrow)
-        print("printing data")
-        print(data)
-    if 'export' in request.POST:
-        response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="responses.xlsx"'
-        workbook = openpyxl.Workbook()
-        worksheet = workbook.active
-        worksheet.title = 'Responses'
-        for index, header in enumerate(headers):
-            print(index)
-            worksheet.cell(row=1, column=index+1, value=header)
+            exportdata.append(exportrow)
+            print("printing data")
+            print(data)
+        if 'export' in request.POST:
+            response = HttpResponse(content_type='application/ms-excel')
+            response['Content-Disposition'] = 'attachment; filename="responses.xlsx"'
+            workbook = openpyxl.Workbook()
+            worksheet = workbook.active
+            worksheet.title = 'Responses'
+            for index, header in enumerate(headers):
+                print(index)
+                worksheet.cell(row=1, column=index+1, value=header)
 
-            
-        for row_index, exportrow in enumerate(exportdata):
-            for column_index, cell in enumerate(exportrow):
-                print("printing cell")
-                print(cell)
-                worksheet.cell(row=row_index+2, column=column_index+1, value=cell)
-        workbook.save(response)
-        return response
+                
+            for row_index, exportrow in enumerate(exportdata):
+                for column_index, cell in enumerate(exportrow):
+                    print("printing cell")
+                    print(cell)
+                    worksheet.cell(row=row_index+2, column=column_index+1, value=cell)
+            workbook.save(response)
+            return response
 
-    return render(request, 'index/form_newresponse.html', {'form': form, 'headers': headers,'response':responseform, 'data': data})
+        return render(request, 'index/form_newresponse.html', {'form': form, 'headers': headers,'response':responseform, 'data': data})
     # return render(request, 'index/form_newresponse.html', context)
 
 
@@ -208,13 +216,15 @@ def view_data(request, code):
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
-    forms = Form.objects.filter(creator = request.user)
-    return render(request, "index/index.html", {
-        "forms": forms
-    })
+    else :
+        
+        forms = Form.objects.filter(creator = request.user)
+        return render(request, "index/index.html", {
+            "forms": forms
+        })
 def home(request):
     if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('home'))
+        return HttpResponseRedirect(reverse('login'))
     forms = Form.objects.filter(creator = request.user)
     return render(request, "index/index.html", {
         "forms": forms

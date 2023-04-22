@@ -23,11 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = '5&41du-&cv-cazt$r@k84h*gz-s!*jk2b)131ek^2-lpou#2y4'
 
 SECRET_KEY = 'I}<K>n.UZ+@FurgugXPkA&O#(M-!E*I6~C1M^;OPB%+b-lvV}^'
-CSRF_TRUSTED_ORIGINS = ['https://localhost:80', 'https://127.0.0.1:8000']
+# CSRF_TRUSTED_ORIGINS = ['https://localhost:80', 'https://127.0.0.1:8000']
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = ['*']
