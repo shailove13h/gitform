@@ -526,6 +526,12 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <textarea class="short-answer" disabled placeholder="Mobile Number input" ></textarea>
                             </div>`
                                 this.parentNode.insertBefore(ele, this.parentNode.childNodes[4])
+                            }else if(this.value === "picture"){
+                                let ele = document.createElement("div");
+                                ele.innerHTML = `<div class="answers" data-id="${this.dataset.id}">
+                                <textarea class="short-answer" disabled placeholder="You can Capture image" ></textarea>
+                            </div>`
+                                this.parentNode.insertBefore(ele, this.parentNode.childNodes[4])
                             }else if(this.value === "aadhar"){
                                 let ele = document.createElement("div");
                                 ele.innerHTML = `<div class="answers" data-id="${this.dataset.id}">
@@ -603,9 +609,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 <option value="awcs" >AWC</option>    
                 <option value="short">Short answers</option>
                 <option value="mobile">Mobile Number</option>
-                
                 <option value="aadhar">Aadhar Number</option>
                 <option value="date">Date</option>
+                <option value="picture">Image</option>
+
                 
                 <option value="multiple choice" selected>Multiple choice</option>
                 <option value="checkbox">Checkbox</option>

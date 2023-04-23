@@ -138,6 +138,25 @@
                     <input type="date" "title="Please enter Date" name="{{question.id}}" class="short-answer" value="{{response|get_response:question.pk}}" placeholder = "Date" {% if question.required %} required {% endif %} required>
             
                 </div>  
+
+                {% elif question.question_type == "picture" %}
+                
+                        
+                <div id="{{question.id}}" name= "{{question.id}}" >
+                    <!-- <img src="{{response|get_response:question.pk}}" /> -->
+                                    <!-- Add an element to preview the captured image -->
+                    <div class="margin-top-bottom box question-box">
+                        <h1 class="question-title txtClr">Take a picture:</h1>
+                        <video id="video" width="100%" height="auto" autoplay></video>
+                        <button id="capture" class="btn btn-primary" type="button">Capture</button>
+                        <br>
+                        <canvas id="canvas" style="display:none;"></canvas>
+                        <img id="image-preview" style="max-width: 100%; margin-top: 10px;" src="{{response|get_response:question.pk}}" >
+                        <input type="hidden" id="image-input" value="{{response|get_response:question.pk}}" name="picture">
+                    </div>
+                </div>  
+
+
                 {% elif question.question_type == "aadhar" %}
                 
                         
@@ -163,4 +182,27 @@
         </a>
     {% endif %}
 </div>
+
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const captureButton = document.getElementById('capture');
+    const imageInput = document.getElementById('image-input');
+    const imagePreview = document.getElementById('image-preview');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then((stream) => {
+        video.srcObject = stream;
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+
+    captureButton.addEventListener('click', () => {
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = canvas.toDataURL();
+        imageInput.value = imageData;
+        imagePreview.src = imageData;
+    });
+</script>
 {% endblock %}

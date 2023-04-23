@@ -5,10 +5,11 @@
 {% block script %}
 <script src="{% static 'index/viewform.js' %}" defer></script>
 <script src="https://unpkg.com/htmx.org@1.8.6"></script>
+
 {% endblock %}
 {% block body %}
 <div class="container-fluid">
-    <form class="container" method="POST"  action="{% url 'submit_form' form.code %}"  autocomplete="off">
+    <form class="container" method="POST"  action="{% url 'submit_form' form.code %}" enctype="multipart/form-data"  autocomplete="off">
         <span id="bg-color" style="display: none;">{{form.background_color}}</span>
         <span id="text-color" style="display: none;">{{form.text_color}}</span>
         {% csrf_token %}
@@ -26,8 +27,8 @@
         </div>
         {% endif %}
         
-
-       
+      
+        
         {% for question in form.questions.all %}
         <div class="margin-top-bottom box question-box">
             <h1 class="question-title txtClr">{{question.question}} {% if question.required %}<span class="require-star">*</span>{% endif %}</h1>
@@ -108,22 +109,37 @@
                 
                 <div id="awcs">
                     {% include 'partials/awc.html'%}
-                </div>      
+                </div>   
+                
+                {% elif question.question_type == "picture" %}
+                
+                <div id="picture">
+                      <!-- Add an element to preview the captured image -->
+    <div class="margin-top-bottom box question-box">
+        <h1 class="question-title txtClr">Take a picture:</h1>
+        <video id="video" width="100%" height="auto" autoplay></video>
+        <button id="capture" class="btn btn-primary" type="button">Capture</button>
+        <br>
+        <canvas id="canvas" style="display:none;"></canvas>
+        <img id="image-preview" style="max-width: 100%; margin-top: 10px;">
+        <input type="hidden" id="image-input" name="picture">
+    </div>
+                </div>  
                 
                 
                
                   
                     
             {% endif %}
-
            
         </div>
         {% endfor %}
+        
         <div class="margin-top-bottom">
             <input type="submit" value="Submit" class="btn btn-submit">
         </div>
     </form>
-
+    
 
        
 
@@ -137,5 +153,26 @@
 </div>
 {% load django_htmx %}
 {% django_htmx_script %}
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const captureButton = document.getElementById('capture');
+    const imageInput = document.getElementById('image-input');
+    const imagePreview = document.getElementById('image-preview');
 
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then((stream) => {
+        video.srcObject = stream;
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+
+    captureButton.addEventListener('click', () => {
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = canvas.toDataURL();
+        imageInput.value = imageData;
+        imagePreview.src = imageData;
+    });
+</script>
 {% endblock %}

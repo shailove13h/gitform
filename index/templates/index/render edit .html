@@ -1,0 +1,22 @@
+
+
+for row_index, exportrow in enumerate(exportdata):
+for column_index, cell in enumerate(exportrow):
+    print("printing cell")
+    
+    if 'data:image/png;base64,' in cell:
+        print("we founde data64")
+        
+        image_data = cell.split(',')[1]
+        decoded_image_data = base64.b64decode(image_data)
+
+    
+        img = Image.open(BytesIO(decoded_image_data))
+        # add the image to the worksheet using drawing
+        drawing = worksheet.drawing
+        drawing.add(img)
+        worksheet.cell(row=row_index+2, column=column_index+1, value=drawing)
+    else :
+        worksheet.cell(row=row_index+2, column=column_index+1, value=cell)
+workbook.save(response)
+return response

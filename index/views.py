@@ -14,12 +14,18 @@ from django.urls import reverse_lazy
 
 from django.core.paginator import Paginator
 import openpyxl
+from openpyxl import Workbook
+
+from openpyxl.drawing.image import Image as XLImage
 import csv
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from .models import Form, Responses
 
-
+import io
+import base64
+from io import BytesIO
+from PIL import Image
 def responsedetails(request, code, response_code):
     form = Form.objects.get(code=code)
     responses = Responses.objects.filter(response_code=response_code)
@@ -163,7 +169,13 @@ def view_data(request, code):
                         row.append(str(choice))
                         exportrow.append(str(choice))
                         
+                    elif question.question_type == "picture":
+                
+                        # get the image data from the database
+                        choice = answer.answer
                         
+                        row.append(choice)
+                        exportrow.append(choice)
 
                     elif question.question_type == "multiple choice" or question.question_type == "checkbox":
                 
@@ -186,8 +198,7 @@ def view_data(request, code):
             data.append(row)
 
             exportdata.append(exportrow)
-            print("printing data")
-            print(data)
+            
         if 'export' in request.POST:
             response = HttpResponse(content_type='application/ms-excel')
             response['Content-Disposition'] = 'attachment; filename="responses.xlsx"'
@@ -195,17 +206,87 @@ def view_data(request, code):
             worksheet = workbook.active
             worksheet.title = 'Responses'
             for index, header in enumerate(headers):
-                print(index)
+                
                 worksheet.cell(row=1, column=index+1, value=header)
 
                 
+            # for row_index, exportrow in enumerate(exportdata):
+            #     for column_index, cell in enumerate(exportrow):
+            #         print("printing cell")
+                    
+            #         if 'data:image/png;base64,' in cell:
+            #             print("we founde data64")
+                        
+            #             image_data = cell.split(',')[1]
+            #             decoded_image_data = base64.b64decode(image_data)
+
+                    
+            #             img = Image.open(BytesIO(decoded_image_data))
+            #             # add the image to the worksheet using drawing
+            #             drawing = worksheet.drawing
+            #             drawing.add(img)
+            #             worksheet.cell(row=row_index+2, column=column_index+1, value=drawing)
+            #         else :
+            #             worksheet.cell(row=row_index+2, column=column_index+1, value=cell)
+            # workbook.save(response)
+            # return response
+            # for row_index, exportrow in enumerate(exportdata):
+            #     for column_index, cell in enumerate(exportrow):
+            #         if 'data:image/png;base64,' in cell:
+            #             # decode the image data from base64
+            #             image_data = cell.split(',')[1]
+            #             decoded_image_data = base64.b64decode(image_data)
+                        
+            #             # create an image object from the decoded data
+            #             img = Image.open(BytesIO(decoded_image_data))
+                        
+            #             # add the image to the worksheet using drawing
+            #             drawing = XLImage(img)
+            #             drawing.width = 80 # adjust the size of the image as needed
+            #             drawing.height = 60
+            #             worksheet.add_image(drawing, f"{chr(column_index+65)}{row_index+2}") # add the image to the cell
+                        
+            #         else:
+            #             worksheet.cell(row=row_index+2, column=column_index+1, value=cell)
+
+
+
+            # workbook.save(response)
+            # return response
+
             for row_index, exportrow in enumerate(exportdata):
                 for column_index, cell in enumerate(exportrow):
-                    print("printing cell")
-                    print(cell)
-                    worksheet.cell(row=row_index+2, column=column_index+1, value=cell)
+                    if 'data:image/png;base64,' in cell:
+                        # decode the image data from base64
+                        image_data = cell.split(',')[1]
+                        decoded_image_data = base64.b64decode(image_data)
+                        
+                        # create an image object from the decoded data
+                        img = Image.open(BytesIO(decoded_image_data))
+                        
+                        # calculate the cell width and height based on the image size
+                        cell_width = img.width * 0.50
+                        # adjust this value as needed
+                        cell_height = img.height * 0.50
+                        # adjust this value as needed
+                        
+                        # add the image to the worksheet using drawing
+                        drawing = XLImage(img)
+                        drawing.width = cell_width
+                        drawing.height = cell_height
+                        worksheet.row_dimensions[row_index+2].height = cell_height # set the row height to fit the image
+                        worksheet.column_dimensions[chr(column_index+65)].width = cell_width # set the column width to fit the image
+                        worksheet.add_image(drawing, f"{chr(column_index+65)}{row_index+2}") # add the image to the cell
+                        
+                    else:
+                        worksheet.cell(row=row_index+2, column=column_index+1, value=cell)
+
             workbook.save(response)
             return response
+
+
+
+
 
         return render(request, 'index/form_newresponse.html', {'form': form, 'headers': headers,'response':responseform, 'data': data})
     # return render(request, 'index/form_newresponse.html', context)
@@ -1024,6 +1105,7 @@ def submit_form(request, code):
                 response.save()
         for i in request.POST:
             #Excluding csrf token
+            print(i)
             if i == "csrfmiddlewaretoken" or i == "email-address":
                 continue
             if i=="districts":
@@ -1037,7 +1119,8 @@ def submit_form(request, code):
                 question = formInfo.questions.get(question_type = i)
             elif i=="awcs":
                 question = formInfo.questions.get(question_type = i)
-                
+            elif i=="picture":
+                question = formInfo.questions.get(question_type = i)
             else:
 
                 question = formInfo.questions.get(id = i)
@@ -1045,6 +1128,8 @@ def submit_form(request, code):
             for j in request.POST.getlist(i):
                 
                 answer = Answer(answer=j, answer_to = question)
+
+
                 answer.save()
                 response.response.add(answer)
                 response.save()
@@ -1427,6 +1512,8 @@ def edit_response(request, code, response_code):
             elif i=="villages":
                 question = formInfo.questions.get(question_type = i)
             elif i=="awcs":
+                question = formInfo.questions.get(question_type = i)
+            elif i=="picture":
                 question = formInfo.questions.get(question_type = i)
                 
             else:

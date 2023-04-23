@@ -45,7 +45,11 @@
                     
                     {% elif forloop.counter0 > 0 %}
 
-                    <td>{{ cell }}</td>
+                    <td>{% if 'data:image/png;base64,' in cell %}
+                      <img src="{{ cell }}" />
+                    {% else %}
+                      {{ cell }}
+                    {% endif %}</td>
                     {%endif%}
                     {% endfor %}
 

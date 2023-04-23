@@ -1,6 +1,7 @@
 from django.urls import path,include
 from . import views
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('home', views.home, name="home"),
     path('', views.index, name="index"),
@@ -52,4 +53,4 @@ urlpatterns = [
     path('sectors', views.sectors, name='sectors'),
     path('awcs', views.awcs, name='awcs'),
    
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

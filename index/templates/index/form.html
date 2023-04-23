@@ -94,6 +94,7 @@
                 <option value="mobile" {% if question.question_type == "mobile" %}selected{% endif %}>Mobile Number</option>
                 <option value="aadhar" {% if question.question_type == "aadhar" %}selected{% endif %}>Aadhar Number</option>
                 <option value="date" {% if question.question_type == "date" %}selected{% endif %}>Date </option>
+                <option value="picture" {% if question.question_type == "picture" %}selected{% endif %}>Image </option>
                 
                 <option value="multiple choice" {% if question.question_type == "multiple choice" %}selected{% endif %}>Multiple choice</option>
                 <option value="checkbox" {% if question.question_type == "checkbox" %}selected{% endif %}>Checkbox</option>
@@ -178,6 +179,8 @@
             </div>
         </div>
         {% endfor %}
+
+        
     </div>
     <div class="question-options">
         <img src = "{% static 'Icon/add.png' %}" class="form-option-icon" title = "Add question" alt = "Add question icon" id="add-question" />
