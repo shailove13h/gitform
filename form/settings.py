@@ -27,7 +27,7 @@ SECRET_KEY = 'I}<K>n.UZ+@FurgugXPkA&O#(M-!E*I6~C1M^;OPB%+b-lvV}^'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['*']
@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_htmx',
+    'django_social_share',
+    'django_like_button',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'form.urls'
@@ -82,27 +85,27 @@ WSGI_APPLICATION = 'form.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases  freeforms
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+# DATABASES = {
+#         'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'dataform',
+#         'NAME': 'dataform',
 
-        'USER': 'shailoveform',
+#         'USER': 'shailoveform',
 
-        'PASSWORD': '$Sd45371845',
+#         'PASSWORD': '$Sd45371845',
 
-        'HOST': 'localhost',
+#         'HOST': 'localhost',
 
-        'PORT': '',
-        }
-     }
+#         'PORT': '',
+#         }
+#      }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

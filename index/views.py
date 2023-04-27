@@ -1445,7 +1445,7 @@ def edit_response(request, code, response_code):
             
             sector= ""
         else:
-            sector = Block.objects.filter(id=sector_id).first()
+            sector = Sector.objects.filter(id=sector_id).first()
         
      # Accessing answer for the question type "village"
     allvillage = Village.objects.all()

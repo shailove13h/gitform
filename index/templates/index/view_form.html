@@ -117,12 +117,12 @@
                       <!-- Add an element to preview the captured image -->
     <div class="margin-top-bottom box question-box">
         <h1 class="question-title txtClr">Take a picture:</h1>
-        <video id="video" width="100%" height="auto" autoplay></video>
+        <video id="video" width="100%" height="auto" autoplay required></video>
         <button id="capture" class="btn btn-primary" type="button">Capture</button>
         <br>
         <canvas id="canvas" style="display:none;"></canvas>
-        <img id="image-preview" style="max-width: 100%; margin-top: 10px;">
-        <input type="hidden" id="image-input" name="picture">
+        <img id="image-preview" style="max-width: 100%; margin-top: 10px;" required>
+        <input type="hidden" id="image-input" name="picture" required>
     </div>
                 </div>  
                 
@@ -160,7 +160,8 @@
     const imageInput = document.getElementById('image-input');
     const imagePreview = document.getElementById('image-preview');
 
-    navigator.mediaDevices.getUserMedia({ video: true })
+    navigator.mediaDevices.getUserMedia({ video: true,
+    facingMode:"environment" })
     .then((stream) => {
         video.srcObject = stream;
     })
