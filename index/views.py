@@ -201,58 +201,15 @@ def view_data(request, code):
             
         if 'export' in request.POST:
             response = HttpResponse(content_type='application/ms-excel')
-            response['Content-Disposition'] = 'attachment; filename="responses.xlsx"'
+            response['Content-Disposition'] = 'attachment; filename="FormResponses.xlsx"'
             workbook = openpyxl.Workbook()
             worksheet = workbook.active
-            worksheet.title = 'Responses'
+            worksheet.title = 'FormResponses'
             for index, header in enumerate(headers):
                 
                 worksheet.cell(row=1, column=index+1, value=header)
 
-                
-            # for row_index, exportrow in enumerate(exportdata):
-            #     for column_index, cell in enumerate(exportrow):
-            #         print("printing cell")
-                    
-            #         if 'data:image/png;base64,' in cell:
-            #             print("we founde data64")
-                        
-            #             image_data = cell.split(',')[1]
-            #             decoded_image_data = base64.b64decode(image_data)
-
-                    
-            #             img = Image.open(BytesIO(decoded_image_data))
-            #             # add the image to the worksheet using drawing
-            #             drawing = worksheet.drawing
-            #             drawing.add(img)
-            #             worksheet.cell(row=row_index+2, column=column_index+1, value=drawing)
-            #         else :
-            #             worksheet.cell(row=row_index+2, column=column_index+1, value=cell)
-            # workbook.save(response)
-            # return response
-            # for row_index, exportrow in enumerate(exportdata):
-            #     for column_index, cell in enumerate(exportrow):
-            #         if 'data:image/png;base64,' in cell:
-            #             # decode the image data from base64
-            #             image_data = cell.split(',')[1]
-            #             decoded_image_data = base64.b64decode(image_data)
-                        
-            #             # create an image object from the decoded data
-            #             img = Image.open(BytesIO(decoded_image_data))
-                        
-            #             # add the image to the worksheet using drawing
-            #             drawing = XLImage(img)
-            #             drawing.width = 80 # adjust the size of the image as needed
-            #             drawing.height = 60
-            #             worksheet.add_image(drawing, f"{chr(column_index+65)}{row_index+2}") # add the image to the cell
-                        
-            #         else:
-            #             worksheet.cell(row=row_index+2, column=column_index+1, value=cell)
-
-
-
-            # workbook.save(response)
-            # return response
+                  
 
             for row_index, exportrow in enumerate(exportdata):
                 for column_index, cell in enumerate(exportrow):
@@ -289,10 +246,7 @@ def view_data(request, code):
 
 
         return render(request, 'index/form_newresponse.html', {'form': form, 'headers': headers,'response':responseform, 'data': data})
-    # return render(request, 'index/form_newresponse.html', context)
-
-
-    # return render(request, 'index/form_newresponse.html', context)
+  
 # Create your views here.
 def index(request):
     if not request.user.is_authenticated:
@@ -310,22 +264,6 @@ def home(request):
     return render(request, "index/index.html", {
         "forms": forms
     })
-# def blockes(request,code):
-#     blockes = Block.objects.all()
-#     context = {'blockes' : blockes,'form': formInfo,'code': code,
-#           }
-    
-#     # district_id = request.GET.get('district')
-#     # blockes = Block.objects.filter(district_id=district_id).order_by('name')
-#     # return render(request, 'hr/city_dropdown_list_options.html', {'blockes': blockes})
-#     formInfo = Form.objects.filter(code = code)
-#     return render(request, "index/block_dropdown_list_options.html", {
-#             "code": code,
-#             "form": formInfo,
-#             "blockes": blockes
-
-#         })
-
 
 
 def login_view(request):
